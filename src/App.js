@@ -1,12 +1,22 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import axios from 'axios';
+import { Category, ChartComponent, DataLabel, LineSeries, Legend, Tooltip, Inject, SeriesCollectionDirective, SeriesDirective } from '@syncfusion/ej2-react-charts';
 
 function App() {
 const [customer, setCustomer] = useState([])
 const [transaction, setTransactions] = useState([])
 const [FilterByName, setFilterByName] = useState('')
 const [FilterByAmount, setFilterByAmount] = useState('')
+const [selectedCustomer, setSelectedCustomer] = useState(null);
+const [selectedCustomerTransactions, setSelectedCustomerTransactions] = useState([]); 
+const transactionsRef = useRef(null);
+
+
+
+
+
+
 
   async function getcustomers(){
     try {
@@ -51,7 +61,18 @@ const searchAmount = (e) => {
 }
 
 
-
+const handleCustomerSelection = (customerId) => {
+  setSelectedCustomer(customerId);
+  const customerTransactions = transaction.filter(transaction => transaction.customer_id == customerId);
+  setSelectedCustomerTransactions(customerTransactions);
+  console.log(selectedCustomerTransactions)
+  console.log(selectedCustomer)
+  setTimeout(() => {
+    if (transactionsRef.current) {
+      transactionsRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, 100);
+};
 
   return (
     <section className=" bg-zinc-900 p-10">
@@ -104,14 +125,14 @@ const searchAmount = (e) => {
 
 
                 <td>
-                  <input type="radio" name='select' className="rounded-full w-4 h-4 cursor-pointer" />
+                  <input type="radio" name='select' className="rounded-full w-4 h-4 cursor-pointer" checked={selectedCustomer === cust.id} onChange={() => handleCustomerSelection(cust.id)} />
                 </td>
               </tr>
             );
           }):
          <tr>
           <td colSpan={4}>
-            <p className=' text-red-700 py-5 font-bold text-3xl'>Sorry!!!!! No Data Match This Name</p>
+            <p className=' text-red-700 py-5 font-bold text-3xl'>Sorry!!!!! No Data Matches Your Write</p>
           </td>
          </tr>
           
@@ -124,8 +145,22 @@ const searchAmount = (e) => {
     
     
 
-    
-    
+    <div className=' p-5 w-full h-96 bg-neutral-800  relative'  ref={transactionsRef}>
+{selectedCustomerTransactions.length > 0 ? 
+    <ChartComponent title='Customer Amount Analysis' primaryYAxis={{title:"Amount"}} primaryXAxis={{valueType:"Category", title:'Date'}} legendSettings={{visible: true}}
+    tooltip={{enable:true}}
+    >
+    <Inject services={[LineSeries, Legend, Tooltip, DataLabel, Category]}/>
+    <SeriesCollectionDirective>
+      <SeriesDirective type='Line' dataSource={selectedCustomerTransactions} xName='date' yName='amount' name='Amount' marker={{dataLabel:{visible: true}, visible: true}}>
+
+      </SeriesDirective>
+    </SeriesCollectionDirective>
+  </ChartComponent>
+  :
+  <p className=' text-orange-700 py-5 font-bold text-5xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center'>You Should Select a customer to show his chart</p>
+  }
+    </div>
     
     
     
