@@ -39,10 +39,12 @@ const transactionsRef = useRef(null);
         if(data){
           setTransactions(data.transactions)
           if (FilterByAmount) {
-            const filteredTransactions = data.transactions.filter(trans => trans.amount == FilterByAmount);
-            const customerIds = filteredTransactions.map(trans => trans.customer_id);
-            const uniqueCustomerIds = [...new Set(customerIds)];
-            const filteredCustomers = data.customers.filter(cust => uniqueCustomerIds.includes(cust.id));
+            const customerAmounts = data.transactions.reduce((acc, transaction) => {
+              acc[transaction.customer_id] = (acc[transaction.customer_id] || 0) + transaction.amount;
+              return acc;
+            }, {});
+            
+            const filteredCustomers = data.customers.filter(cust => customerAmounts[cust.id] === parseFloat(FilterByAmount));
             setCustomer(filteredCustomers);
           }
         }
