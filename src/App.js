@@ -105,7 +105,7 @@ const handleCustomerSelection = (customerId) => {
   
   {customer.length > 0? customer.map((cust) => {
             const customerTransactions = transaction.filter(transaction => transaction.customer_id == cust.id);
-
+            const totalAmount = customerTransactions.reduce((prev, next) => prev + next.amount, 0);
             return (
               <tr key={cust.id} className='border-b'>
                 <td className='text-white font-medium text-lg'>{cust.id}</td>
@@ -122,9 +122,11 @@ const handleCustomerSelection = (customerId) => {
                         </ul>
                       </article>
                     ))
+                    
                   ) : (
                     <p className='text-white font-medium text-lg'>No transactions found</p>
                   )}
+                  <p className='text-orange-600 font-medium text-lg text-center'>Total amount : <span className=' text-white'>{totalAmount}</span></p>
                 </td>
 
 
