@@ -12,15 +12,12 @@ const [selectedCustomer, setSelectedCustomer] = useState(null);
 const [selectedCustomerTransactions, setSelectedCustomerTransactions] = useState([]); 
 const transactionsRef = useRef(null);
 
-
-
-
-
+const api_Link = 'https://diaa-0-abdelaziz.github.io/task-route-api/db.json'
 
 
   async function getcustomers(){
     try {
-        const {data} = await axios.get(`https://diaa-0-abdelaziz.github.io/task-route-api/db.json`)
+        const {data} = await axios.get(`${api_Link}`)
         if(data){
           setCustomer(data.customers)
           if (FilterByName) {
@@ -32,10 +29,10 @@ const transactionsRef = useRef(null);
         console.log(err);
     }
 }
-
+//*******get transation data and filter by amount by total amount*************
   async function getTransactions(){
     try {
-        const {data} = await axios.get(`https://diaa-0-abdelaziz.github.io/task-route-api/db.json`)
+        const {data} = await axios.get(`${api_Link}`)
         if(data){
           setTransactions(data.transactions)
           if (FilterByAmount) {
@@ -52,6 +49,7 @@ const transactionsRef = useRef(null);
         console.log(err);
     }
 }
+
 useEffect(() => {
   getcustomers(FilterByName);
   getTransactions(FilterByAmount)
@@ -62,6 +60,7 @@ const searchName = (e) => {
 setFilterByName(e.target.value)
 setFilterByAmount('')
 }
+
 const searchAmount = (e) => {
   setFilterByAmount(e.target.value)
   setFilterByName('')
@@ -91,67 +90,58 @@ const handleCustomerSelection = (customerId) => {
         <input type="number" name="Name" value={FilterByAmount} className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-orane-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6" placeholder="Filter By Amount" onChange={searchAmount}/>
         </div>
       </div>
-     <table className=" w-full my-5">
-  <thead className=' text-center text-2xl bg-orange-600'>
-    <tr>
-      <th>id</th>
-      <th>name</th>
-      <th>transactions</th>
-      <th>Select</th>
-    </tr>
-  </thead>
-  <tbody className=' text-center'>
-  
-  
-  {customer.length > 0? customer.map((cust) => {
-            const customerTransactions = transaction.filter(transaction => transaction.customer_id == cust.id);
-            const totalAmount = customerTransactions.reduce((prev, next) => prev + next.amount, 0);
-            return (
-              <tr key={cust.id} className='border-b'>
-                <td className='text-white font-medium text-lg'>{cust.id}</td>
-                <td className='text-white font-medium text-lg'>{cust.name}</td>
-                <td>
+    <table className=" w-full my-5">
+      <thead className=' text-center text-2xl bg-orange-600'>
+        <tr>
+          <th>id</th>
+          <th>name</th>
+          <th>transactions</th>
+          <th>Select</th>
+        </tr>
+      </thead>
+      <tbody className=' text-center'>
+      {customer.length > 0? customer.map((cust) => {
+                const customerTransactions = transaction.filter(transaction => transaction.customer_id == cust.id);
+                const totalAmount = customerTransactions.reduce((prev, next) => prev + next.amount, 0);
+                return (
+                  <tr key={cust.id} className='border-b'>
+                    <td className='text-white font-medium text-lg'>{cust.id}</td>
+                    <td className='text-white font-medium text-lg'>{cust.name}</td>
+                    <td>
 
 
-                  {customerTransactions.length > 0 ? (
-                    customerTransactions.map((transaction) => (
-                      <article key={transaction.id} className='bg-white rounded-2xl py-2 px-5 my-5 w-fit m-auto'>
-                        <ul className='text-orange-600 font-medium text-lg text-left'>
-                          <li>date: {transaction.date}</li>
-                          <li>amount: {transaction.amount}</li>
-                        </ul>
-                      </article>
-                    ))
-                    
-                  ) : (
-                    <p className='text-white font-medium text-lg'>No transactions found</p>
-                  )}
-                  <p className='text-orange-600 font-medium text-lg text-center'>Total amount : <span className=' text-white'>{totalAmount}</span></p>
-                </td>
+                      {customerTransactions.length > 0 ? (
+                        customerTransactions.map((transaction) => (
+                          <article key={transaction.id} className='bg-white rounded-2xl py-2 px-5 my-5 w-fit m-auto'>
+                            <ul className='text-orange-600 font-medium text-lg text-left'>
+                              <li>date: {transaction.date}</li>
+                              <li>amount: {transaction.amount}</li>
+                            </ul>
+                          </article>
+                        ))
+                        
+                      ) : (
+                        <p className='text-white font-medium text-lg'>No transactions found</p>
+                      )}
+                      <p className='text-orange-600 font-medium text-lg text-center'>Total amount : <span className=' text-white'>{totalAmount}</span></p>
+                    </td>
 
 
 
-                <td>
-                  <input type="radio" name='select' className="rounded-full w-4 h-4 cursor-pointer" checked={selectedCustomer === cust.id} onChange={() => handleCustomerSelection(cust.id)} />
-                </td>
-              </tr>
-            );
-          }):
-         <tr>
-          <td colSpan={4}>
-            <p className=' text-red-700 py-5 font-bold text-3xl'>Sorry!!!!! No Data Matches Your Write</p>
-          </td>
-         </tr>
-          
-          }
-
-
-  </tbody>
-</table>
-    
-    
-    
-
+                    <td>
+                      <input type="radio" name='select' className="rounded-full w-4 h-4 cursor-pointer" checked={selectedCustomer === cust.id} onChange={() => handleCustomerSelection(cust.id)} />
+                    </td>
+                  </tr>
+                );
+              }):
+            <tr>
+              <td colSpan={4}>
+                <p className=' text-red-700 py-5 font-bold text-3xl'>Sorry!!!!! No Data Matches Your Write</p>
+              </td>
+            </tr>
+              }
+      </tbody>
+    </table>
     <div className=' p-5 w-full h-96 bg-neutral-800  relative'  ref={transactionsRef}>
 {selectedCustomerTransactions.length > 0 ? 
     <ChartComponent title='Customer Amount Analysis' primaryYAxis={{title:"Amount"}} primaryXAxis={{valueType:"Category", title:'Date'}} legendSettings={{visible: true}}
@@ -168,9 +158,6 @@ const handleCustomerSelection = (customerId) => {
   <p className=' text-orange-700 py-5 font-bold text-5xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center'>You Should Select a customer to show his chart</p>
   }
     </div>
-    
-    
-    
     </section>
   );
 }
