@@ -20,9 +20,13 @@ const transactionsRef = useRef(null);
 
   async function getcustomers(){
     try {
-        const {data} = await axios.get(`http://localhost:9000/customers?name=${FilterByName}`)
+        const {data} = await axios.get(`https://diaa-0-abdelaziz.github.io/task-route-api/db.json`)
         if(data){
-          setCustomer(data)
+          setCustomer(data.customers)
+          if (FilterByName) {
+            const filteredCustomers = customer.filter(cust => cust.name.toLowerCase().includes(FilterByName.toLowerCase()));
+            setCustomer(filteredCustomers);
+          } 
         }
     } catch (err) {
         console.log(err);
@@ -31,14 +35,15 @@ const transactionsRef = useRef(null);
 
   async function getTransactions(){
     try {
-        const {data} = await axios.get(`http://localhost:9000/transactions?amount=${FilterByAmount}`)
+        const {data} = await axios.get(`https://diaa-0-abdelaziz.github.io/task-route-api/db.json`)
         if(data){
-          setTransactions(data)
+          setTransactions(data.transactions)
           if (FilterByAmount) {
-            const customerIds = data.map(transaction => transaction.customer_id);
+            const filteredTransactions = data.transactions.filter(trans => trans.amount == FilterByAmount);
+            const customerIds = filteredTransactions.map(trans => trans.customer_id);
             const uniqueCustomerIds = [...new Set(customerIds)];
-            const filteredCustomers = await Promise.all(uniqueCustomerIds.map(id => axios.get(`http://localhost:9000/customers?id=${id}`)));
-            setCustomer(filteredCustomers.map(response => response.data).flat());
+            const filteredCustomers = data.customers.filter(cust => uniqueCustomerIds.includes(cust.id));
+            setCustomer(filteredCustomers);
           }
         }
     } catch (err) {
@@ -65,8 +70,6 @@ const handleCustomerSelection = (customerId) => {
   setSelectedCustomer(customerId);
   const customerTransactions = transaction.filter(transaction => transaction.customer_id == customerId);
   setSelectedCustomerTransactions(customerTransactions);
-  console.log(selectedCustomerTransactions)
-  console.log(selectedCustomer)
   setTimeout(() => {
     if (transactionsRef.current) {
       transactionsRef.current.scrollIntoView({ behavior: 'smooth' });
