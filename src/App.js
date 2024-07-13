@@ -155,7 +155,7 @@ const handleCustomerSelection = (customerId, custName) => {
     <div className=' p-5 w-full h-96 bg-neutral-800  relative'  ref={transactionsRef}>
 {selectedCustomerTransactions.length > 0 ? 
    <>
-   <p className='text-white text-center font-medium text-lg'> This Chart belongs to customer: <span className=' font-extrabold text-orange-600'>{customerName}</span> and his ID: <span className=' font-extrabold text-orange-600'>{selectedCustomer}</span></p>
+   <p className='text-white text-center font-medium text-lg'> This Chart belongs to customer: <span className=' font-extrabold text-orange-600'>{customerName}</span></p>
     <ChartComponent title='Customer Amount Analysis' primaryYAxis={{title:"Amount"}} primaryXAxis={{valueType:"Category", title:'Date'}} legendSettings={{visible: true}}
     tooltip={{enable:true}}
     >
