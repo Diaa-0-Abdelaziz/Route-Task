@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import './App.css';
 import axios from 'axios';
 import { Category, ChartComponent, DataLabel, LineSeries, Legend, Tooltip, Inject, SeriesCollectionDirective, SeriesDirective } from '@syncfusion/ej2-react-charts';
+import { FaChartLine } from "react-icons/fa6";
 
 function App() {
 const [customer, setCustomer] = useState([])
@@ -82,7 +83,7 @@ const handleCustomerSelection = (customerId) => {
     <section className=" bg-zinc-900 p-10">
      <h1 className=' text-center text-7xl font-extrabold	text-orange-600'>Route Task</h1>
      <h3 className=' mt-2 text-center text-3xl font-extrabold	text-orange-700 tracking-[2px] border-b-2 border-orange-900 border-dashed w-fit m-auto pb-2'>This Page was Developed by Diaa Abdelaziz</h3>
-      <div className=' flex justify-between mt-10'>
+      <div className=' flex flex-wrap gap-5 w-auto justify-around mt-10'>
         <div>
         <input type="text" name="Name" value={FilterByName} className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-orane-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6" placeholder="Filter By Name" onChange={searchName}/>
         </div>
@@ -96,7 +97,7 @@ const handleCustomerSelection = (customerId) => {
           <th>id</th>
           <th>name</th>
           <th>transactions</th>
-          <th>Select</th>
+          <th>Charts</th>
         </tr>
       </thead>
       <tbody className=' text-center'>
@@ -129,7 +130,10 @@ const handleCustomerSelection = (customerId) => {
 
 
                     <td>
-                      <input type="radio" name='select' className="rounded-full w-4 h-4 cursor-pointer" checked={selectedCustomer === cust.id} onChange={() => handleCustomerSelection(cust.id)} />
+                    
+                    <i className='w-fit p-3 ml-8 text-3xl rounded-full bg-orange-900 cursor-pointer hover:bg-orange-700 hover:text-neutral-800 transition-all duration-700  text-white flex items-center justify-center' onClick={() => handleCustomerSelection(cust.id)}><FaChartLine /></i>
+                      
+                      {/* <input type="radio" name='select' className="rounded-full w-4 h-4 cursor-pointer" checked={selectedCustomer === cust.id} onChange={} /> */}
                     </td>
                   </tr>
                 );
