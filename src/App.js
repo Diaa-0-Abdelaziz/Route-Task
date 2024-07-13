@@ -6,6 +6,7 @@ import { FaChartLine } from "react-icons/fa6";
 
 function App() {
 const [customer, setCustomer] = useState([])
+const [customerName, setCustomerName] = useState('')
 const [transaction, setTransactions] = useState([])
 const [FilterByName, setFilterByName] = useState('')
 const [FilterByAmount, setFilterByAmount] = useState('')
@@ -68,7 +69,8 @@ const searchAmount = (e) => {
 }
 
 
-const handleCustomerSelection = (customerId) => {
+const handleCustomerSelection = (customerId, custName) => {
+  setCustomerName(custName)
   setSelectedCustomer(customerId);
   const customerTransactions = transaction.filter(transaction => transaction.customer_id == customerId);
   setSelectedCustomerTransactions(customerTransactions);
@@ -131,7 +133,7 @@ const handleCustomerSelection = (customerId) => {
 
                     <td>
                     
-                    <i className='w-fit p-3 ml-8 text-3xl rounded-full bg-orange-900 cursor-pointer hover:bg-orange-700 hover:text-neutral-800 transition-all duration-700  text-white flex items-center justify-center' onClick={() => handleCustomerSelection(cust.id)}><FaChartLine /></i>
+                    <i className='w-fit p-3 ml-8 text-3xl rounded-full bg-orange-900 cursor-pointer hover:bg-orange-700 hover:text-neutral-800 transition-all duration-700  text-white flex items-center justify-center' onClick={() => handleCustomerSelection(cust.id, cust.name)}><FaChartLine /></i>
                       
                       {/* <input type="radio" name='select' className="rounded-full w-4 h-4 cursor-pointer" checked={selectedCustomer === cust.id} onChange={} /> */}
                     </td>
@@ -148,6 +150,9 @@ const handleCustomerSelection = (customerId) => {
     </table>
     <div className=' p-5 w-full h-96 bg-neutral-800  relative'  ref={transactionsRef}>
 {selectedCustomerTransactions.length > 0 ? 
+   <>
+  { console.log(customerName)}
+   <p className='text-white text-center font-medium text-lg'> This Chart belongs to customer: <span className=' font-extrabold text-orange-600'>{customerName}</span></p>
     <ChartComponent title='Customer Amount Analysis' primaryYAxis={{title:"Amount"}} primaryXAxis={{valueType:"Category", title:'Date'}} legendSettings={{visible: true}}
     tooltip={{enable:true}}
     >
@@ -158,6 +163,7 @@ const handleCustomerSelection = (customerId) => {
       </SeriesDirective>
     </SeriesCollectionDirective>
   </ChartComponent>
+   </>
   :
   <p className=' text-orange-700 py-5 font-bold text-5xl absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center'>You Should Select a customer to show his chart</p>
   }
