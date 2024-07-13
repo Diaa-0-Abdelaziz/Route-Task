@@ -9,9 +9,12 @@ const [customer, setCustomer] = useState([])
 const [transaction, setTransactions] = useState([])
 const [FilterByName, setFilterByName] = useState('')
 const [FilterByAmount, setFilterByAmount] = useState('')
-const [selectedCustomer, setSelectedCustomer] = useState(null);
 const [selectedCustomerTransactions, setSelectedCustomerTransactions] = useState([]); 
+//******catch customer ID********* */
+const [selectedCustomer, setSelectedCustomer] = useState(null);
+//******catch customer name********* */
 const [customerName, setCustomerName] = useState('')
+//******using useRef to smooth scroll when show chart of a customer********* */
 const transactionsRef = useRef(null);
 
 const api_Link = 'https://diaa-0-abdelaziz.github.io/task-route-api/db.json'
@@ -38,6 +41,7 @@ const api_Link = 'https://diaa-0-abdelaziz.github.io/task-route-api/db.json'
         if(data){
           setTransactions(data.transactions)
           if (FilterByAmount) {
+            //*******concat total amounts that customer do it******** */
             const customerAmounts = data.transactions.reduce((acc, transaction) => {
               acc[transaction.customer_id] = (acc[transaction.customer_id] || 0) + transaction.amount;
               return acc;
