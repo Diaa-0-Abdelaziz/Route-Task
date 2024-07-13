@@ -6,12 +6,12 @@ import { FaChartLine } from "react-icons/fa6";
 
 function App() {
 const [customer, setCustomer] = useState([])
-const [customerName, setCustomerName] = useState('')
 const [transaction, setTransactions] = useState([])
 const [FilterByName, setFilterByName] = useState('')
 const [FilterByAmount, setFilterByAmount] = useState('')
 const [selectedCustomer, setSelectedCustomer] = useState(null);
 const [selectedCustomerTransactions, setSelectedCustomerTransactions] = useState([]); 
+const [customerName, setCustomerName] = useState('')
 const transactionsRef = useRef(null);
 
 const api_Link = 'https://diaa-0-abdelaziz.github.io/task-route-api/db.json'
@@ -151,8 +151,7 @@ const handleCustomerSelection = (customerId, custName) => {
     <div className=' p-5 w-full h-96 bg-neutral-800  relative'  ref={transactionsRef}>
 {selectedCustomerTransactions.length > 0 ? 
    <>
-  { console.log(customerName)}
-   <p className='text-white text-center font-medium text-lg'> This Chart belongs to customer: <span className=' font-extrabold text-orange-600'>{customerName}</span></p>
+   <p className='text-white text-center font-medium text-lg'> This Chart belongs to customer: <span className=' font-extrabold text-orange-600'>{customerName}</span> and his ID: <span className=' font-extrabold text-orange-600'>{selectedCustomer}</span></p>
     <ChartComponent title='Customer Amount Analysis' primaryYAxis={{title:"Amount"}} primaryXAxis={{valueType:"Category", title:'Date'}} legendSettings={{visible: true}}
     tooltip={{enable:true}}
     >
