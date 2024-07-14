@@ -94,7 +94,7 @@ const handleCustomerSelection = (customerId, custName) => {
         <input type="text" name="Name" value={FilterByName} className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-orane-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6" placeholder="Filter By Name" onChange={searchName}/>
         </div>
         <div>
-        <input type="number" name="Name" value={FilterByAmount} className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-orane-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6" placeholder="Filter By Amount" onChange={searchAmount}/>
+        <input type="number" name="amount" value={FilterByAmount} className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-orane-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-orange-600 sm:text-sm sm:leading-6" placeholder="Filter By Total Amount" onChange={searchAmount}/>
         </div>
       </div>
     <table className=" w-full my-5">
